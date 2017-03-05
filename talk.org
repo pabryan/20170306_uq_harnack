@@ -93,23 +93,101 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
 \printbibliography
 ** Eigenvalue estimates 1
 - Assume either $\bdry{M} = \emptyset$ or we consider the Dirichlet problem $u \equiv 0$ on $\bdry{M}$.
-- Let $\lambda, u_0$ be such that
+- Let $\lambda, v$ be such that
   \[
-  \laplace u_1 = - \lambda u_1
+  \laplace v = - \lambda v
   \]
 - The minus sign ensures $\lambda \geq 0$:
   \[
-  \lambda \int u_1^2 = -\int u_1 \laplace u_1 = \int\abs{\nabla u}^2
+  \lambda \int v^2 = -\int v \laplace v = \int\abs{\nabla u}^2
   \]
-- Strong max principle implies $\lambda > 0$ for non-trivial $u_1$, i.e. $u_1 \not\equiv 0$.
+- Strong max principle implies $\lambda > 0$ for non-trivial $v$, i.e. $v \not\equiv 0$.
+- Rayleigh-Quotient
+  \[
+  \lambda_1 = \inf\{\int \abs{\nabla u}^2 : \int u^2 = 1\} \leq \lambda
+  \]
+- Strong max principle (or directly via Harnack!) implies $u_1 > 0$ on $\interior{M}$ where $\laplace u_1 = -\lambda_1 u_1$
 ** Eigenvalue estimates 2
-- Let $u(x, t) = e^{\lambda t} u_0(x)$.
-- Then $\partial_t u = \lambda e^{\lambda t} u_0 = e^{\lambda t} \laplace u_0 = \laplace u$ solves the heat equation.
+- Let $u(x, t) = e^{\lambda_1 t} u_1(x)$.
+- Then $\partial_t u = \lambda_1 e^{\lambda_1 t} u_1 = e^{\lambda_1 t} \laplace u_1 = \laplace u$ solves the heat equation.
 - Harnack
   \[
-  e^{\lambda (t_2 - t_1)} = \frac{\sup_x u(x, t_1)}{\inf_x u(x, t_2)} \leq C(t_2 - t_1, \diam(M), g)
+  e^{\lambda_1 (t_2 - t_1)} = \frac{\sup_x u(x, t_1)}{\inf_x u(x, t_2)} \leq C(t_2 - t_1, \diam(M), g)
   \]
 - \[
-  0 \leq \lambda \leq \inf_{t_1<t_2} \frac{\ln(C(t_2 - t_1))}{t_2 - t_1}
+  0 \leq \lambda_1 \leq \inf_{t_1<t_2} \frac{\ln(C(t_2 - t_1))}{t_2 - t_1}
   \]
 - So we want to compute $C$!
+- Eg: $M = D \subset \RR^2$ is the disc of radius $r$: $\lambda_1 = \tfrac{1}{r^2} j_{0,1}^2$ where $j_{0,1}$ is the first zero the Bessel function $J_0$.
+- $M = \Omega \subset \RR^2$ a domain with smooth boundary and area $A$: $\lambda_1 \geq \frac{\pi}{A} j_{0,1}^2$
+- No boundary, non-negative Ricci and diameter $d$: $\lambda_1 \geq \pi^2/d^2$. Li-Yau, Zhong-Yang.
+* Li-Yau Harnack
+** Li-Yau from Moser 1
+- Moser Harnack: $\operatorname{osc} u = \sup \abs{u(x_1) - u(x_2)} \leq d(x_1, x_2)^{\alpha}$ is like a gradient bound:
+  \[
+  u(x_2) - u(x_1) = \int_0^1 \partial_s u(\gamma(s)) ds = \int_0^1 g(\grad u, \gamma') ds
+  \]
+  where $\gamma(0) = x_1$, $\gamma(1) = x_2$.
+- $u(x_1, t_1) \leq C u(x_2, t_2)$ iff
+  \[
+  \ln u(x_2, t_2) - \ln u(x_1, t_1) \geq \ln C
+  \]
+- \[
+  \ln u(x_2, t_2) - \ln u(x_1, t_1) = \int_{t_1}^{t_2} \partial_t \ln u(\gamma(t), t) dt
+  \]
+  where $\gamma(t_1) = x_1$ and $\gamma(t_2) = x_2$.
+- \[
+  \partial_t \ln u(\gamma(t), t) = \partial_t \ln u + d\ln u \cdot \gamma'
+  \]
+  and pointwise estimate will be sharpest!
+** Li Yau from Moser 2: Sharp estimates
+- Separate $\grad \ln u$ and $\gamma'$ parts.
+- Cauchy-Schwarz via polarisation
+  \[
+  d\ln u \cdot \gamma' = g(\grad \ln u, \gamma') \geq -\abs{\grad \ln u}^2 - \tfrac{1}{4} \abs{\gamma'}^2
+  \]
+  with equality if and only if $\gamma' = -2\grad \ln u$. Follows from $g(\grad \ln u + \tfrac{1}{2} \gamma', \grad \ln u + \tfrac{1}{2} \gamma') \geq 0$
+- So we need an estimate on
+  \[
+  Q = \partial_t \ln u - \abs{\grad \ln u}^2 \geq \tfrac{1}{4} \abs{\gamma'}^2 + C
+  \]
+  which is the best we can hope for given equality in Cauchy-Schwartz.
+- As if by magic:
+  \[
+  Q = \laplace \ln u
+  \]
+** Li-Yau from Moser 3: Max principle
+- Compute
+  \[
+  \partial_t Q - \laplace Q \geq g(\grad Q, \grad \ln u) + \frac{2}{n} Q^2
+  \]
+- ODE comparison:
+  \[
+  q(t) = -\frac{n}{t}
+  \]
+  satisfies
+  \[
+  \begin{cases}
+  \partial_t q &= -\frac{2}{n} q^2 \\
+  q(0) &= -\infty
+  \end{cases}
+  \]
+- Max principle implies $Q \geq - \frac{2}{n} \frac{1}{t}$
+- Li-Yau Harnack
+  \[
+  \partial_t \ln u - \abs{\ln u}^2 \geq - \frac{2}{n} \frac{1}{t}
+  \]
+** Obtaining Moser
+- We reverse the process by integrating Li-Yau Harnack:
+- \[
+  \int \partial_t \ln u - \abs{\ln u}^2 + \frac{1}{4} \int \abs{\gamma'}^2 \geq  \frac{1}{4} \int \abs{\gamma'}^2 - \frac{2}{n} \int \frac{1}{t}
+  \]
+- Or for every $\gamma$:
+  \begin{align*}
+  \ln u(x_2, t_2) - \ln u(x_1, t_2) &\geq \frac{1}{4} \int \abs{\gamma'}^2 - \frac{2}{n} \left(\ln t_2 - \ln t_1\right) \\
+  & \geq \frac{1}{4} \frac{d(x_1, x_2)^2}{t_2 - t_1} + \frac{2}{n} \ln \left(\tfrac{t_2}{t_1}\right)
+  \end{align*}
+- Taking exponentials gives sharp Moser:
+  \[
+  \frac{u(x_2, t_2)}{u(x_1, t_1)} \geq \left(\tfrac{t_2}{t_1}\right)^{n/2} \exp\left(\frac{1}{4} \frac{d(x_1, x_2)^2}{t_2 - t_1}\right)
+  \]

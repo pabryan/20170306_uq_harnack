@@ -1,0 +1,115 @@
+#+TITLE: Li-Yau-Hamilton Harnack Inequalities
+#+AUTHOR: Paul Bryan
+#+EMAIL: pabryan@gmail.com
+#+DATE: 2016-07-20 Wed
+
+#+SETUPFILE: ~/.emacs.d/org-templates/bibliography.org
+
+#+OPTIONS: H:2 toc:t
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [presentation]
+#+BEAMER_THEME: Boadilla
+#+LaTeX_HEADER: \AtBeginSection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection]\end{frame}}
+
+#+LaTeX_HEADER: \input{local_definitions}
+
+* Introduction
+** Heat Equation
+- Let $(M, g)$ be closed.
+- Heat Equation: $\partial_t u = \Delta_g u$.
+  - $u : M \to \RR$
+  - $\laplace_g u = \div \grad_g u$
+  - For $(x, t) \in M \times (0, T)$ some $T>0$
+** Max Principle 1
+- $\inf_{x\in M, t \in [0, T)} u(x, t) = \inf_{x\in M} u(x, 0)$
+- Let $u_0 = \inf_{x\in M} u(x, 0)$ and show $\tilde{u}(x, t) := u(x, t) - u_0 \geq 0$.
+- True at $t = 0$. 
+- Show $\forall \tau \in (0, T)$ $\tilde{u} \geq 0$ on $M \times [0, \tau]$.
+- If not for some $\tau$, then $\exists t_0 \in (0, \tau]$ and $x_0 \in M$ such that
+  \[
+  u(x_0, t_0) = \inf_{x \in M, t \in [0, \tau]} \tilde u (x, t) < 0.
+  \]
+- At $(x_0, t_0)$:
+  \begin{align*}
+  \partial_t u &\leq 0 \\
+  \Delta u &\geq 0.
+  \end{align*}
+- Almost a contradiction, but not quite. We need a strict inequality!
+** Max Principle 2: To get a contradiction
+- Let $u_{\epsilon}(x, t) = \tilde{u}(x, t) + \epsilon e^t$.
+- Show $u_{\epsilon} \geq 0$ for all $\epsilon$.
+- For each fixed $\epsilon > 0$:
+  \[
+  \partial_t u_{\epsilon} = \laplace u_{\epsilon} + \epsilon e^t > \laplace u_{\epsilon}.
+  \]
+- Apply same argument as before to get $x_0 \in M$, $t_0 \in (0, \tau]$ with
+  \[
+  \partial_t u_{\epsilon} - \laplace u_{\epsilon} \leq 0.
+  \]
+- Remark: only need super solutions: $\partial_t u \geq \laplace u$
+- Remark: More generally can take $\partial_t u \geq F(\nabla^2 u, \nabla u, u, x, t)$ provided $F$ is smooth and monotone in first and third arguments.
+- Eg: $\partial_t u \geq A^{ij}(x, t) \nabla^2_{ij} u + B(x, t)^i \nabla_i u + c(x, t)u$ with $c(x, t) \geq 0$.
+** Max Principle 3: With Boundary
+- Suppose $M$ has non-empty boundary $\bdry{M}$.
+ - Then $\inf_{x\in M, t \in [0, T)} u(x, t) = \inf_{(x, t) \in \bdry_P} u(x, t)$
+- Parabolic boundary: $\bdry_P = \bdry_P (M \times [0, T)) = M \times \{0\} \union \bdry{M} \times [0, T)$
+- If not we find $x_0 \in \interior{M}$, $t_0 \in (0, T)$ as before.
+- In particular: if $u \geq 0$ on $\bdry_P$, then $u \geq 0$ on $M \times [0, T)$.
+- Comparison (important for non-linear equations!): $u \geq v$ on $\bdry_P$ implies $u\geq v$ on $M \times [0, T)$.
+- In particular: if $u \geq v$ at $t = 0$ and along $\bdry{M}$ for all $t$, then $u \geq v$ on $M \times [0, T)$.
+* Moser's Parabolic Harnack Inequality \cite{MR0159139}
+** Harnack Inequality
+- /Non-negative Solutions/: $u(x, t) \geq 0$
+- Let $K \subset \interior{M}$ be compact.
+- Let $t_1 < t_2 \in (0, T)$.
+- \[
+  \sup_{x \in K} u(x, t_1) \leq C(\diam K, t_2-t_1, g) \inf_{x \in K} u(x, t_2)
+  \]
+- $\diam K = \sup_{(x_1, x_2) \in K \times K} d(x_1, x_2)$
+** Strong Maximum Principle
+ - Either $u \equiv \text{const.}$ or for all $(x_0, t_0) \notin \bdry_P$ we have $u(x, t) > \inf_{(x, t) \in \bdry_P} u(x, t)$.
+ - Suffices to show if $\tilde{u} (x_0, t_0) = 0$ for some $x_0 \in \interior{M}$ and $t_0 \in (0, T)$ then $\tilde{u}(x, t) \equiv 0$.
+ - $\tilde{u}(x, t) = u(x, t) - \inf_{\bdry_P} u$.
+ - If such an $(x_0, t_0)$ exists, choose any other $(x_1, t_1)$ with $t_1 < t_0$.
+ - The Harnack says for any $K$ compact containing $x_0$ and $x_1$ we have,
+   \[
+   0 \leq \tilde{u}(x_1, t_1) \leq \sup_{x \in K} u(x, t_1) \leq C \inf_{x\in K} u(x, t_0) = 0.
+   \]
+ - Thus $u \equiv 0$ for $t \leq t_0$.
+** de Giorgi-Nash-Moser
+- Divergence form equations with measureable coefficients:
+  \[
+  \partial_t u = A^{ij} \nabla^2_{ij} u + B^i \nabla_i u + C u
+  \]
+  with $A, B, C$ measurable.
+- Weak Solutions
+\begin{thm}
+Weak solutions are locally \holder{} continuous. That is on any compact set $K$ there is exists $C > 0, \alpha \in (0, 1)$ such that
+\[
+\abs{u(x_1, t_1) - u(x_2, t_2)} \leq C d((x_1, t_1), (x_2, t_2))^{\alpha}
+\]
+where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
+\end{thm}
+\printbibliography
+** Eigenvalue estimates 1
+- Assume either $\bdry{M} = \emptyset$ or we consider the Dirichlet problem $u \equiv 0$ on $\bdry{M}$.
+- Let $\lambda, u_0$ be such that
+  \[
+  \laplace u_1 = - \lambda u_1
+  \]
+- The minus sign ensures $\lambda \geq 0$:
+  \[
+  \lambda \int u_1^2 = -\int u_1 \laplace u_1 = \int\abs{\nabla u}^2
+  \]
+- Strong max principle implies $\lambda > 0$ for non-trivial $u_1$, i.e. $u_1 \not\equiv 0$.
+** Eigenvalue estimates 2
+- Let $u(x, t) = e^{\lambda t} u_0(x)$.
+- Then $\partial_t u = \lambda e^{\lambda t} u_0 = e^{\lambda t} \laplace u_0 = \laplace u$ solves the heat equation.
+- Harnack
+  \[
+  e^{\lambda (t_2 - t_1)} = \frac{\sup_x u(x, t_1)}{\inf_x u(x, t_2)} \leq C(t_2 - t_1, \diam(M), g)
+  \]
+- \[
+  0 \leq \lambda \leq \inf_{t_1<t_2} \frac{\ln(C(t_2 - t_1))}{t_2 - t_1}
+  \]
+- So we want to compute $C$!

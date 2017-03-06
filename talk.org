@@ -83,13 +83,13 @@
   \]
   with $A, B, C$ measurable.
 - Weak Solutions
-\begin{thm}
+\begin{theorem}
 Weak solutions are locally \holder{} continuous. That is on any compact set $K$ there is exists $C > 0, \alpha \in (0, 1)$ such that
 \[
 \abs{u(x_1, t_1) - u(x_2, t_2)} \leq C d((x_1, t_1), (x_2, t_2))^{\alpha}
 \]
 where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
-\end{thm}
+\end{theorem}
 \printbibliography
 ** Eigenvalue estimates 1
 - Assume either $\bdry{M} = \emptyset$ or we consider the Dirichlet problem $u \equiv 0$ on $\bdry{M}$.
@@ -99,12 +99,12 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
   \]
 - The minus sign ensures $\lambda \geq 0$:
   \[
-  \lambda \int v^2 = -\int v \laplace v = \int\abs{\nabla u}^2
+  \lambda \int v^2 = -\int v \laplace v = \int\abs{\nabla v}^2
   \]
 - Strong max principle implies $\lambda > 0$ for non-trivial $v$, i.e. $v \not\equiv 0$.
 - Rayleigh-Quotient
   \[
-  \lambda_1 = \inf\{\int \abs{\nabla u}^2 : \int u^2 = 1\} \leq \lambda
+  \lambda_1 = \inf\left\{\frac{\int \abs{\nabla u}^2}{\int u^2} : u \not\equiv 0\right\} \leq \lambda
   \]
 - Strong max principle (or directly via Harnack!) implies $u_1 > 0$ on $\interior{M}$ where $\laplace u_1 = -\lambda_1 u_1$
 ** Eigenvalue estimates 2
@@ -123,14 +123,14 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
 - No boundary, non-negative Ricci and diameter $d$: $\lambda_1 \geq \pi^2/d^2$. Li-Yau, Zhong-Yang.
 * Li-Yau Harnack
 ** Li-Yau from Moser 1
-- Moser Harnack: $\operatorname{osc} u = \sup \abs{u(x_1) - u(x_2)} \leq d(x_1, x_2)^{\alpha}$ is like a gradient bound:
+- Moser Harnack: $\operatorname{osc} u = \sup \abs{u(x_1) - u(x_2)} \leq C d(x_1, x_2)^{\alpha}$ is like a gradient bound:
   \[
   u(x_2) - u(x_1) = \int_0^1 \partial_s u(\gamma(s)) ds = \int_0^1 g(\grad u, \gamma') ds
   \]
   where $\gamma(0) = x_1$, $\gamma(1) = x_2$.
 - $u(x_1, t_1) \leq C u(x_2, t_2)$ iff
   \[
-  \ln u(x_2, t_2) - \ln u(x_1, t_1) \geq \ln C
+  \ln u(x_2, t_2) - \ln u(x_1, t_1) \geq -\ln C
   \]
 - \[
   \ln u(x_2, t_2) - \ln u(x_1, t_1) = \int_{t_1}^{t_2} \partial_t \ln u(\gamma(t), t) dt
@@ -142,22 +142,36 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
   and pointwise estimate will be sharpest!
 ** Li Yau from Moser 2: Sharp estimates
 - Separate $\grad \ln u$ and $\gamma'$ parts.
+- Let $f = f$
 - Cauchy-Schwarz via polarisation
   \[
-  d\ln u \cdot \gamma' = g(\grad \ln u, \gamma') \geq -\abs{\grad \ln u}^2 - \tfrac{1}{4} \abs{\gamma'}^2
+  df \cdot \gamma' = g(\grad f, \gamma') \geq -\abs{\grad f}^2 - \tfrac{1}{4} \abs{\gamma'}^2
   \]
-  with equality if and only if $\gamma' = -2\grad \ln u$. Follows from $g(\grad \ln u + \tfrac{1}{2} \gamma', \grad \ln u + \tfrac{1}{2} \gamma') \geq 0$
+  with equality if and only if $\gamma' = -2\grad f$. Follows from $g(\grad f + \tfrac{1}{2} \gamma', \grad f + \tfrac{1}{2} \gamma') \geq 0$
 - So we need an estimate on
   \[
-  Q = \partial_t \ln u - \abs{\grad \ln u}^2 \geq \tfrac{1}{4} \abs{\gamma'}^2 + C
+  \partial_t f - \abs{\grad f}^2 - \tfrac{1}{4} \abs{\gamma'}^2 =: Q  - \tfrac{1}{4} \abs{\gamma'}^2
   \]
   which is the best we can hope for given equality in Cauchy-Schwartz.
+** Li Yau 1: Harnack Quantity
 - As if by magic:
   \[
   Q = \laplace \ln u
   \]
-** Li-Yau from Moser 3: Max principle
-- Compute
+- Put $f = \ln u$, $Q = \laplace f$
+- \[
+  \partial_t Q = \partial_t \laplace f = \laplace \partial_t f = \laplace \left(\laplace f + \abs{\nabla f}^2\right)
+  \]
+- Bochner Formula. 
+  \[
+  \partial_t Q = \laplace \laplace f + 2g(\grad f, \grad \laplace f) + 2\abs{\nabla^2 f}^2 + 2 \ric(\nabla f, \nabla f)
+  \]
+- Cauchy Schwartz + $\ric \geq 0$:
+  \[
+  \partial_t Q \geq \laplace Q + 2g(\grad f, \grad Q) + \frac{2}{n} Q^2
+  \]
+** Li-Yau 2: Max principle
+- We have
   \[
   \partial_t Q - \laplace Q \geq g(\grad Q, \grad \ln u) + \frac{2}{n} Q^2
   \]
@@ -166,12 +180,14 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
   q(t) = -\frac{n}{t}
   \]
   satisfies
+#+BEGIN_LaTeX
   \[
   \begin{cases}
   \partial_t q &= -\frac{2}{n} q^2 \\
   q(0) &= -\infty
   \end{cases}
   \]
+#+END_LaTeX
 - Max principle implies $Q \geq - \frac{2}{n} \frac{1}{t}$
 - Li-Yau Harnack
   \[
@@ -191,3 +207,8 @@ where $d((x_1, t_1), (x_2, t_2)) = \max\{d(x_1, x_2), |t_2 - t_1|\}$.
   \[
   \frac{u(x_2, t_2)}{u(x_1, t_1)} \geq \left(\tfrac{t_2}{t_1}\right)^{n/2} \exp\left(\frac{1}{4} \frac{d(x_1, x_2)^2}{t_2 - t_1}\right)
   \]
+** Fundamental Solution and Eigenvalues
+- \[
+  u(x_1, t_1) \leq \left(\tfrac{t_1}{t_2}\right)^{n/2} \exp\left(-\frac{1}{4} \frac{d(x_1, x_2)^2}{t_2 - t_1}\right) u(x_2, t_2)
+  \]
+- $\frac{1}{t_2 - t_1} \ln C = \frac{1}{t_2 - t_1} \tfrac{n}{2} \ln(t_2 - t_1) \exp\left(-\frac{1}{4} \frac{d(x_1, x_2)^2}{t_2 - t_1}\right)$
